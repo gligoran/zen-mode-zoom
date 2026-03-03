@@ -4,6 +4,26 @@
   "description": "Automatically scales editor font size when entering Zen Mode",
   "publisher": "gligoran",
   "version": "0.0.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gligoran/zen-font-scale"
+  },
+  "homepage": "https://github.com/gligoran/zen-font-scale#readme",
+  "bugs": {
+    "url": "https://github.com/gligoran/zen-font-scale/issues"
+  },
+  "keywords": [
+    "zen mode",
+    "font size",
+    "font scale",
+    "focus",
+    "distraction free"
+  ],
+  "galleryBanner": {
+    "color": "#1e1e2e",
+    "theme": "dark"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -49,13 +69,14 @@
     }
   },
   "scripts": {
-    "compile": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
-    "watch": "npm run compile -- --watch",
-    "package": "npm run compile -- --minify"
+    "compile": "bun build src/extension.ts --outdir=dist --external vscode --format=cjs --target=node",
+    "watch": "bun build src/extension.ts --outdir=dist --external vscode --format=cjs --target=node --watch",
+    "package": "bun build src/extension.ts --outdir=dist --external vscode --format=cjs --target=node --minify",
+    "vsce:package": "vsce package",
+    "vsce:publish": "vsce publish"
   },
   "devDependencies": {
     "@types/vscode": "^1.85.0",
-    "esbuild": "^0.24.0",
-    "typescript": "^5.7.0"
+    "@vscode/vsce": "^3.2.0"
   }
 }
