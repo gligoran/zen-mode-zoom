@@ -1,49 +1,51 @@
 import * as vscode from "vscode";
 
-const STATE_KEY = "originalFontSize";
+const STATE_KEY = "preZenZoomLevel";
 
-export function activate(context: vscode.ExtensionContext) {
-  // Crash recovery: if we have a saved font size, VS Code was closed while in Zen Mode.
-  // Restore the original font size.
-  const savedFontSize = context.globalState.get<number>(STATE_KEY);
-  if (savedFontSize !== undefined) {
-    const config = vscode.workspace.getConfiguration("editor");
-    config.update("fontSize", savedFontSize, vscode.ConfigurationTarget.Global);
-    context.globalState.update(STATE_KEY, undefined);
+export async function activate(context: vscode.ExtensionContext) {
+  // Crash recovery: if we were in Zen Mode when VS Code closed,
+  // the zoom level is still elevated but Zen Mode itself doesn't persist.
+  // Restore the original zoom level.
+  const crashRecoveryZoom = context.globalState.get<number>(STATE_KEY);
+  if (crashRecoveryZoom !== undefined) {
+    const windowConfig = vscode.workspace.getConfiguration("window");
+    await windowConfig.update(
+      "zoomLevel",
+      crashRecoveryZoom,
+      vscode.ConfigurationTarget.Global
+    );
+    await context.globalState.update(STATE_KEY, undefined);
   }
 
   const command = vscode.commands.registerCommand(
-    "zenFontScale.toggle",
+    "zenModeZoom.toggle",
     async () => {
-      const original = context.globalState.get<number>(STATE_KEY);
-      const editorConfig = vscode.workspace.getConfiguration("editor");
+      const savedZoom = context.globalState.get<number>(STATE_KEY);
+      const zoomIncrement = vscode.workspace
+        .getConfiguration("zenModeZoom")
+        .get<number>("zoomIncrement", 2);
+      const windowConfig = vscode.workspace.getConfiguration("window");
 
-      if (original === undefined) {
-        // Entering Zen Mode: save current font size, scale up, then toggle
-        const currentSize = editorConfig.get<number>("fontSize", 14);
-        await context.globalState.update(STATE_KEY, currentSize);
-
-        const scaleFactor = vscode.workspace
-          .getConfiguration("zenFontScale")
-          .get<number>("scaleFactor", 1.5);
-        const newSize = Math.round(currentSize * scaleFactor);
-        await editorConfig.update(
-          "fontSize",
-          newSize,
+      if (savedZoom === undefined) {
+        // Entering Zen Mode: save current zoom, increase it, then toggle
+        const currentZoom = windowConfig.get<number>("zoomLevel", 0);
+        await context.globalState.update(STATE_KEY, currentZoom);
+        await windowConfig.update(
+          "zoomLevel",
+          currentZoom + zoomIncrement,
           vscode.ConfigurationTarget.Global
         );
-
         await vscode.commands.executeCommand(
           "workbench.action.toggleZenMode"
         );
       } else {
-        // Exiting Zen Mode: toggle first, then restore font size
+        // Exiting Zen Mode: toggle first, then restore original zoom
         await vscode.commands.executeCommand(
           "workbench.action.toggleZenMode"
         );
-        await editorConfig.update(
-          "fontSize",
-          original,
+        await windowConfig.update(
+          "zoomLevel",
+          savedZoom,
           vscode.ConfigurationTarget.Global
         );
         await context.globalState.update(STATE_KEY, undefined);

@@ -1,22 +1,22 @@
 {
-  "name": "zen-font-scale",
-  "displayName": "Zen Font Scale",
-  "description": "Automatically scales editor font size when entering Zen Mode",
+  "name": "zen-mode-zoom",
+  "displayName": "Zen Mode Zoom",
+  "description": "Automatically zooms in the UI when entering Zen Mode",
   "publisher": "gligoran",
   "version": "0.0.1",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gligoran/zen-font-scale"
+    "url": "https://github.com/gligoran/zen-mode-zoom"
   },
-  "homepage": "https://github.com/gligoran/zen-font-scale#readme",
+  "homepage": "https://github.com/gligoran/zen-mode-zoom#readme",
   "bugs": {
-    "url": "https://github.com/gligoran/zen-font-scale/issues"
+    "url": "https://github.com/gligoran/zen-mode-zoom/issues"
   },
   "keywords": [
     "zen mode",
-    "font size",
-    "font scale",
+    "zoom",
+    "ui scale",
     "focus",
     "distraction free"
   ],
@@ -37,33 +37,33 @@
   "contributes": {
     "commands": [
       {
-        "command": "zenFontScale.toggle",
-        "title": "Zen Font Scale: Toggle Zen Mode with Font Scaling"
+        "command": "zenModeZoom.toggle",
+        "title": "Zen Mode Zoom: Toggle Zen Mode with Zoom"
       }
     ],
     "keybindings": [
       {
-        "command": "zenFontScale.toggle",
+        "command": "zenModeZoom.toggle",
         "key": "ctrl+k z",
         "mac": "cmd+k z",
         "when": "!inZenMode"
       },
       {
-        "command": "zenFontScale.toggle",
+        "command": "zenModeZoom.toggle",
         "key": "ctrl+k z",
         "mac": "cmd+k z",
         "when": "inZenMode"
       }
     ],
     "configuration": {
-      "title": "Zen Font Scale",
+      "title": "Zen Mode Zoom",
       "properties": {
-        "zenFontScale.scaleFactor": {
+        "zenModeZoom.zoomIncrement": {
           "type": "number",
-          "default": 1.5,
-          "minimum": 1.0,
-          "maximum": 3.0,
-          "description": "Font size multiplier when entering Zen Mode"
+          "default": 2,
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Amount to add to the current window.zoomLevel when entering Zen Mode. The original zoom level is restored on exit."
         }
       }
     }

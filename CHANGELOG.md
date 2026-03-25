@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the "Zen Font Scale" extension will be documented in this file.
+All notable changes to the "Zen Mode Zoom" extension will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Toggle Zen Mode with automatic font scaling via command palette or keybinding
-- Configurable scale factor (1.0x to 3.0x, default 1.5x)
-- Crash recovery: restores original font size if VS Code closes while in Zen Mode
+- Toggle Zen Mode with automatic UI zoom via command palette or keybinding
+- Configurable zoom increment (1 to 5 levels, default +2)
+- Crash recovery: restores original zoom level if VS Code closes while in Zen Mode
 - Keyboard shortcut: `Cmd+K Z` (macOS) / `Ctrl+K Z` (Windows/Linux)
